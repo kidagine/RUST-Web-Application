@@ -1,0 +1,100 @@
+<app-navigation-bar></app-navigation-bar>
+<div id="film-grain"></div>
+<body class="checkout">
+  <div class="container">
+    <div class="checkout-content">
+      <div class="page-title">
+        <h1>Checkout</h1>
+      </div>
+      <!-- Order Validation -->
+      <div *ngIf="isErrorValidationVisible === true">
+        <div *ngIf="orderForm.get('firstName').hasError('required')">
+          *First name is required
+        </div>
+        <div *ngIf="orderForm.get('lastName').hasError('required')">
+          *Last name is required
+        </div>
+        <div *ngIf="!currentCountry">
+          *Country is required
+        </div>
+        <div *ngIf="orderForm.get('address').hasError('required')">
+          *Address is required
+        </div>
+        <div *ngIf="orderForm.get('zipCode').hasError('required')">
+          *Zip Code is required
+        </div>
+        <div *ngIf="orderForm.get('city').hasError('required')">
+          *City is required
+        </div>
+        <div *ngIf="orderForm.get('phone').hasError('required')">
+          *Phone Number is required
+        </div>
+        <div *ngIf="orderForm.get('email').hasError('required')">
+          *Email is required
+        </div>
+        <div *ngIf="orderForm.get('email').hasError('email')">
+          *Invalid Email address
+        </div>
+      </div>
+      <!-- Order Form -->
+      <form [formGroup]="orderForm" class="checkout-form" (ngSubmit)="addOrder()">							
+        <div class="checkout-wrapper">
+          <h3>Billing details</h3>
+          <div class="field-wrapper">		
+            <p class="form-row form-row-first"><label>First name</label><input type="text" id="firstName" formControlName="firstName"/>
+            <p class="form-row form-row-last"><label>Last name</label><input type="text" formControlName="lastName"/>
+            <p class="form-row form-row-wide"><label>Country</label>
+              <select [(ngModel)] ="selectedCountry" [ngModelOptions]="{standalone: true}" (ngModelChange)="setCurrentCountry($event)">
+                <option hidden value="">Choose country</option>
+                <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+              </select>
+            <p class="form-row form-row-wide"><label>Address</label><input type="text" formControlName="address"/>
+            <p class="form-row form-row-wide"><label>Zip Code</label><input type="text" formControlName="zipCode"/>
+            <p class="form-row form-row-wide"><label>City</label><input type="text" formControlName="city"/>
+            <p class="form-row form-row-wide"><label>Phone Number</label><input type="text" formControlName="phone"/>
+            <p class="form-row form-row-wide"><label>Email<address></address></label><input type="email" formControlName="email"/>
+          </div>
+        </div>
+        <div id="cart-title" class="sidebar-title">Cart</div>
+        <ul class="cart-list">
+          <li *ngFor="let productCart of productCarts;let i = index">
+            <div class="cart-list-product">
+              <div>
+                <img [src]="productCart.imagePath" height="125" width="125">       
+              </div>
+              <div>
+                <div class="cart-list-name-primary">{{ productCart.name }}</div>
+                <div class="cart-list-name-secondary">color: {{ productCart.color }}</div>  
+                <div class="cart-list-name-secondary">size: {{ productCart.size }}</div>  
+                <div class="cart-list-name-secondary">quantity: {{ productCart.quantity }}</div>  
+              </div>
+              <div class="cart-list-price-primary">{{ productCart.price }}€</div>
+            </div>                          
+          </li>             
+        </ul>
+      <div>      
+        <div id="cart-total">Subtotal: {{ getSubtotal() }}€</div>
+      </div>
+      <div class="purchase-container">
+          <button type="submit">Purchase</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+  <!-- Order Confirmation -->
+  <div *ngIf="isOrderConfirmationVisible === true">
+    <div class="orderConfirmation">
+      <div class="orderConfirmation-content">
+        <div class="orderConfirmation-body">
+          <h3 class="orderConfirmation-header">Order confirmed!</h3>
+          <p>Thank you for your purchase. <br> We've sent an email to you with further details.</p>
+        </div>
+        <div class="orderConfirmation-container" style=" margin-top: 20%;">
+          <button (click)="setOrderConfirmationVisibility()" routerLink="/shop">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<app-footer></app-footer>

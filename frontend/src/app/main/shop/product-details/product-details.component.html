@@ -1,0 +1,90 @@
+<app-navigation-bar></app-navigation-bar>
+<div id="film-grain"></div>
+<!-- Product -->
+<div *ngIf="productModel && currentProduct">
+<main class="page-product" >
+  <div class="product-wrapper">
+    <div class="product">
+      <section class="product-content">
+        <div class="product-content-inner">
+          <div class="product-content-header">
+            <h1 class="title">{{productModel.name}}
+              <a class="brand">{{productModel.price}}€</a>
+            </h1>
+          </div>
+          <div class="color-container">
+            <div>
+              <span>Color:</span><strong>{{currentProduct.color}}</strong>
+            </div>
+            <div class="color-carousel">
+              <div class="color-flex">
+                <div class="color-scroller" *ngFor="let product of products">
+                  <div class="color-wrapper" (click)="setCurrentProduct(product)">
+                    <img [src]="product.imagePath"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a style="font-size: 17px; color: #fff;" *ngIf="currentProductStockIndex > -1">Stock: <span>{{currentProduct.productStocks[currentProductStockIndex].quantity}}</span></a>
+          <form class="product-content-selection" >
+            <div class="selection" >
+              <select class="form-control" (change)="setCurrentProductStockIndex($event.target.value)">
+                <option [value]=-1>Choose size</option>
+                <option *ngFor="let productStock of currentProduct.productStocks;let i = index" [value]="i">
+                  {{productStock.productSize.size}}
+                </option>
+              </select>
+            </div>
+           <button class="button" (click)="addProductToCart()">Add to cart +</button>
+          </form>
+        </div>
+        <a><img [src]="currentProduct.videoPath" width="697" height="697"></a>
+      </section>
+    </div>
+  </div>
+</main>
+<!-- Details !-->
+<section class="details-container">
+  <div class="description-container">
+    <div class="description-wrapper">
+      <div class="details-title">Description</div>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum, nulla labore numquam fugit, ducimus placeat omnis quis accusantium error impedit explicabo. Doloribus aperiam delectus quo consequuntur eius, odit laudantium suscipit deleniti. Natus voluptas porro quia mollitia quidem, beatae distinctio excepturi iusto neque in. Eligendi?</p>
+      <div class="details-title">Materials</div>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia omnis deserunt adipisci inventore ipsam ipsa cum laudantium illum alias earum iure atque, est officia esse quibusdam voluptatum voluptatem, fugiat impedit.</p>          
+    </div>
+  </div>
+  <div class="specifications-container">
+    <div class="specifications-wrapper">
+      <div class="details-title">Specifications</div>
+      <table class="specifications-stack">
+        <td class="specifications-stack-value"></td>
+        <tr >
+          <th class="specifications-stack-label"></th>
+          <td class="specifications-stack-value" >
+            <p>
+            <a *ngFor="let productStock of currentProduct.productStocks">
+              Size: {{productStock.productSize.size}} | {{productStock.productSize.productMetric.metricX}}: {{productStock.productSize.metricXValue}} cm <span *ngIf="productStock.productSize.productMetric.metricY"> | {{productStock.productSize.productMetric.metricY}}: {{productStock.productSize.metricYValue}} cm </span>  <span *ngIf="productStock.productSize.productMetric.metricZ"> | {{productStock.productSize.productMetric.metricZ}}: {{productStock.productSize.metricZValue}} cm</span> <br/>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <th class="specifications-stack-label"></th>
+          <div style ="text-align: center;">
+            <span *ngIf="productModel.productCategory.name === 'Top'">
+              <img src="assets/images/productCategory/topWireframe.png">
+            </span>
+            <span *ngIf="productModel.productCategory.name === 'Bottom'">
+              <img src="assets/images/productCategory/bottomWireframe.png">
+            </span>
+          </div>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+</div>
+<div id="loading-ring-container" *ngIf="!productModels &&   !currentProduct">
+  <div id="loading-ring">Loading...</div>
+</div>
+<app-footer></app-footer>
